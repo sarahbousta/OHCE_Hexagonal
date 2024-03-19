@@ -3,5 +3,6 @@
     "afternoon": "Bon après-midi",
     "evening": "Bonsoir",
     "farewell": "Au revoir",
-    "well_said": "Bien dit!"
+    "well_said": "Bien dit!",
+    "prompt_input": "Qu'avez-vous à me dire ?"
 }
