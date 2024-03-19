@@ -8,5 +8,5 @@ if __name__ == '__main__':
     if len(sys.argv) > 1 and sys.argv[1] == 'api':
         api_app.run(debug=True)
     else:
-        console = ConsoleInterface()
+        console = ConsoleInterface(translator)
         console.start()

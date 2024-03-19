@@ -1,5 +1,5 @@
 {
     "prompt_language": "prompt_language",
-    "prompt_input": "prompt_input",
+    "prompt_input": ">",
     "farewell_message": "farewell_message"
 }

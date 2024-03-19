@@ -52,7 +52,7 @@ def test_echo_with_palindrome(mock_translator, mock_greetings_json):
 
 def test_echo_without_palindrome(mock_translator, mock_greetings_json):
     ohce = Ohce(language="fr")
-    assert ohce.echo("hello") == "hello"
+    assert ohce.echo("olleh") == "hello"
 
 # Test pour la méthode farewell
 def test_farewell(mock_translator, mock_greetings_json):

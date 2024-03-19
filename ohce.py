@@ -22,7 +22,8 @@ class Ohce:
 
     def echo(self, text):
         well_said = self.translator.translate(self.greetings['well_said'], self.language)
-        return text + (f" ({well_said})" if self.is_palindrome(text) else "")
+        reversed_text = text[::-1]
+        return reversed_text + (f" ({well_said})" if self.is_palindrome(text) else "")
 
     def farewell(self):
         farewell_key = 'farewell'
