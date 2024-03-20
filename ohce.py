@@ -10,14 +10,21 @@ class Ohce:
         with open('greetings.json', 'r', encoding='utf-8') as f:
             self.greetings = json.load(f)
 
-    def greet(self):
-        current_hour = datetime.now().hour
+    def get_hour(self):
+        return datetime.now().hour
+    
+    def what_part_of_day(self):
+        current_hour = self.get_hour()
         if 6 <= current_hour < 12:
-            greeting_key = 'morning'
+            return 'morning'
         elif 12 <= current_hour < 18:
-            greeting_key = 'afternoon'
+            return 'afternoon'
         else:
-            greeting_key = 'evening'
+            return 'evening'
+
+    def greet(self):
+        current_hour = self.get_hour()
+        greeting_key = self.what_part_of_day()
         return self.translator.translate(self.greetings[greeting_key], self.language)
 
     def echo(self, text):
