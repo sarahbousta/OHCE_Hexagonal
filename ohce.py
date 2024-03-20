@@ -1,40 +1,52 @@
 import json
 from datetime import datetime
+from enum import Enum
 from translator import TranslatorWrapper
+
+class PartOfDay(Enum):
+    MORNING = 'morning'
+    AFTERNOON = 'afternoon'
+    EVENING = 'evening'
 
 class Ohce:
     def __init__(self, language="fr"):
         self.language = language
         self.translator = TranslatorWrapper()
-        # Charger les salutations et les phrases depuis le fichier JSON
-        with open('greetings.json', 'r', encoding='utf-8') as f:
-            self.greetings = json.load(f)
+        self.greetings = self.load_greetings()
 
-    def get_hour(self):
+    @staticmethod
+    def load_greetings():
+        with open('greetings.json', 'r', encoding='utf-8') as f:
+            return json.load(f)
+
+    @staticmethod
+    def get_hour():
         return datetime.now().hour
     
-    def what_part_of_day(self):
-        current_hour = self.get_hour()
-        if 6 <= current_hour < 12:
-            return 'morning'
-        elif 12 <= current_hour < 18:
-            return 'afternoon'
+    @staticmethod
+    def what_part_of_day(hour):
+        if 6 <= hour < 12:
+            return PartOfDay.MORNING
+        elif 12 <= hour < 18:
+            return PartOfDay.AFTERNOON
         else:
-            return 'evening'
+            return PartOfDay.EVENING
+
+    def translate_message(self, key):
+        return self.translator.translate(self.greetings[key], self.language)
 
     def greet(self):
         current_hour = self.get_hour()
-        greeting_key = self.what_part_of_day()
-        return self.translator.translate(self.greetings[greeting_key], self.language)
+        greeting_key = self.what_part_of_day(current_hour).value
+        return self.translate_message(greeting_key)
 
     def echo(self, text):
-        well_said = self.translator.translate(self.greetings['well_said'], self.language)
+        well_said = self.translate_message('well_said')
         reversed_text = text[::-1]
         return reversed_text + (f" ({well_said})" if self.is_palindrome(text) else "")
 
     def farewell(self):
-        farewell_key = 'farewell'
-        return self.translator.translate(self.greetings[farewell_key], self.language)
+        return self.translate_message('farewell')
 
     @staticmethod
     def is_palindrome(text):
