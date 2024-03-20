@@ -2,8 +2,17 @@ import pytest
 import json
 from unittest.mock import Mock, patch
 from ohce import Ohce
+from clock import Clock, PartOfDay
 
-# Préparer un fichier greetings.json mock pour les tests
+# Fixture pour mocker Clock et configurer les retours nécessaires pour les tests
+@pytest.fixture
+def mock_clock(mocker):
+    clock_mock = Mock(spec=Clock)
+    # Pas besoin de mocker get_hour directement puisqu'on mocke what_part_of_day qui utilise cette valeur
+    mocker.patch('ohce.Clock', return_value=clock_mock)
+    return clock_mock
+
+# Fixture pour créer un fichier de salutations mocké
 @pytest.fixture(scope='module')
 def mock_greetings_json(tmpdir_factory):
     greetings_content = {
@@ -17,49 +26,49 @@ def mock_greetings_json(tmpdir_factory):
     file.write(json.dumps(greetings_content))
     return str(file)
 
-# Initialiser le mock de TranslatorWrapper avant chaque test
+# Fixture pour mocker TranslatorWrapper
 @pytest.fixture
 def mock_translator(mocker):
     translator_mock = Mock()
-    translator_mock.translate = Mock(side_effect=lambda text, lang: text)  # Simule une traduction par identité
+    translator_mock.translate = Mock(side_effect=lambda text, lang: text)
     mocker.patch('ohce.TranslatorWrapper', return_value=translator_mock)
     return translator_mock
 
-# Tests pour la méthode greet
-def test_greet_morning(mock_translator, mock_greetings_json):
-    # Simuler datetime pour retourner une heure du matin
-    with patch('ohce.datetime') as mock_datetime:
-        mock_datetime.now.return_value.hour = 9
-        ohce = Ohce(language="fr")
-        assert ohce.greet() == "Bonjour"
+# Test greet après-midi
+def test_greet_afternoon(mock_translator, mock_greetings_json, mock_clock):
+    mock_clock.what_part_of_day.return_value = PartOfDay.AFTERNOON
+    ohce = Ohce(language="fr")
+    ohce.greetings = json.load(open(mock_greetings_json))
+    assert ohce.greet() == "Bon après-midi"
 
-def test_greet_afternoon(mock_translator, mock_greetings_json):
-    with patch('ohce.datetime') as mock_datetime:
-        mock_datetime.now.return_value.hour = 13
-        ohce = Ohce(language="fr")
-        assert ohce.greet() == "Bon après-midi"
+# Test greet soir
+def test_greet_evening(mock_translator, mock_greetings_json, mock_clock):
+    mock_clock.what_part_of_day.return_value = PartOfDay.EVENING
+    ohce = Ohce(language="fr")
+    ohce.greetings = json.load(open(mock_greetings_json))
+    assert ohce.greet() == "Bonsoir"
 
-def test_greet_evening(mock_translator, mock_greetings_json):
-    with patch('ohce.datetime') as mock_datetime:
-        mock_datetime.now.return_value.hour = 19
-        ohce = Ohce(language="fr")
-        assert ohce.greet() == "Bonsoir"
-
-# Tests pour la méthode echo
+# Test echo avec palindrome
 def test_echo_with_palindrome(mock_translator, mock_greetings_json):
     ohce = Ohce(language="fr")
+    ohce.greetings = json.load(open(mock_greetings_json))
     assert ohce.echo("kayak") == "kayak (Bien dit!)"
 
+# Test echo sans palindrome
 def test_echo_without_palindrome(mock_translator, mock_greetings_json):
     ohce = Ohce(language="fr")
-    assert ohce.echo("olleh") == "hello"
+    ohce.greetings = json.load(open(mock_greetings_json))
+    assert ohce.echo("bonjour") == "ruojnob"
 
-# Test pour la méthode farewell
+# Test farewell
 def test_farewell(mock_translator, mock_greetings_json):
     ohce = Ohce(language="fr")
+    ohce.greetings = json.load(open(mock_greetings_json))
     assert ohce.farewell() == "Au revoir"
 
-# Test pour la méthode is_palindrome
-def test_is_palindrome():
+# Test is_palindrome
+def test_is_palindrome_true():
     assert Ohce.is_palindrome("kayak") == True
-    assert Ohce.is_palindrome("hello") == False
+
+def test_is_palindrome_false():
+    assert Ohce.is_palindrome("python") == False

@@ -1,52 +1,33 @@
 import pytest
-from translator import TranslatorWrapper
+from unittest.mock import Mock
 from ohce import Ohce
-from datetime import datetime
-
-class MockTranslator:
-    def translate(self, text, dest):
-
-        translations = {
-            "Bien dit!": "Bien dit!",
-
-        }
-
-        translation_text = translations.get(text, text[::-1])
-
-        class MockTranslation:
-            def __init__(self, text):
-                self.text = translation_text
-
-        return MockTranslation(text)
-
-@pytest.fixture(autouse=True)
-def mock_translator(monkeypatch):
-
-    monkeypatch.setattr("translator.Translator", MockTranslator)
-
-def test_translator_wrapper():
-    translator = TranslatorWrapper()
-    assert translator.translate("Hello", "fr") == "olleH", "The translated text should be reversed."
-
-class MockDateTime:
-    @staticmethod
-    def now():
-        return datetime(2021, 1, 1, 7)  
-
-@pytest.fixture(autouse=True)
-def mock_datetime(monkeypatch):
-
-    monkeypatch.setattr("ohce.datetime", MockDateTime)
+from clock import Clock, PartOfDay
 
 def test_ohce_greet_morning():
     ohce = Ohce("fr")
-    assert ohce.greet() == "Bonjour"[::-1]
+    ohce.clock = Mock(spec=Clock)
+    ohce.clock.get_hour.return_value = 7
+    ohce.clock.what_part_of_day.return_value = PartOfDay.MORNING
+    assert ohce.greet() == "Bonjour"
 
 def test_ohce_echo_palindrome():
     ohce = Ohce("fr")
-
-    assert ohce.echo("level") == "level (Bien dit!)", "Should recognize a palindrome and add the praise."
+    assert ohce.echo("level") == "level (Bien dit!)"
 
 def test_ohce_farewell():
     ohce = Ohce("fr")
-    assert ohce.farewell() == "Au revoir"[::-1], "Should return the farewell text reversed."
+    assert ohce.farewell() == "Au revoir"
+
+def test_ohce_greet_afternoon():
+    ohce = Ohce("fr")
+    ohce.clock = Mock(spec=Clock)
+    ohce.clock.get_hour.return_value = 15
+    ohce.clock.what_part_of_day.return_value = PartOfDay.AFTERNOON
+    assert ohce.greet() == "Bon après-midi"
+
+def test_ohce_greet_evening():
+    ohce = Ohce("fr")
+    ohce.clock = Mock(spec=Clock)
+    ohce.clock.get_hour.return_value = 20
+    ohce.clock.what_part_of_day.return_value = PartOfDay.EVENING
+    assert ohce.greet() == "Bonsoir"
