@@ -25,7 +25,13 @@ def console_messages_mock(tmpdir):
     messages_file.write(json.dumps(messages_content))
     return str(messages_file)
 
-def test_start_console_interface(translator_wrapper_mock, language_config_mock, console_messages_mock, capsys):
+def test_start_console_interface(translator_wrapper_mock, language_config_mock, console_messages_mock, capsys, monkeypatch):
+    monkeypatch.setattr("config_manager.ConfigManager.__init__", lambda self, config_file=None: None)
+    monkeypatch.setattr("config_manager.ConfigManager.get_language", lambda self: "fr")
+    monkeypatch.setattr("localization_manager.LocalizationManager.__init__", lambda self, messages_file=None, language='en': None)
+    monkeypatch.setattr("localization_manager.LocalizationManager.load_messages", lambda self: None)
+    monkeypatch.setattr("localization_manager.LocalizationManager.get_message", lambda self, message_key, translator, language: message_key)
+
     with patch('console_interface.Ohce', autospec=True) as mock_ohce_class, \
          patch('builtins.input', side_effect=["test input", 'exit']):
         
@@ -33,13 +39,11 @@ def test_start_console_interface(translator_wrapper_mock, language_config_mock, 
         mock_ohce_class.return_value.echo.return_value = 'bob (Bien dit!)'
         mock_ohce_class.return_value.farewell.return_value = 'Au revoir'
         
-        console_interface = ConsoleInterface(translator_wrapper_mock)
-        console_interface.config_file = language_config_mock
-        console_interface.console_messages_file = console_messages_mock
+        console_interface = ConsoleInterface()
         console_interface.start()
 
         captured = capsys.readouterr()
-        assert "Bonjour\nbob (Bien dit!)\nAu revoir\n" in captured.out
+        assert "Bonjour\nbob (Bien dit!)\nfarewell_message\nAu revoir\n" in captured.out
         assert "bob (Bien dit!)" in captured.out
         assert "Au revoir" in captured.out
 
