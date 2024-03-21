@@ -26,8 +26,8 @@ def console_messages_mock(tmpdir):
     return str(messages_file)
 
 def test_start_console_interface(translator_wrapper_mock, language_config_mock, console_messages_mock, capsys, monkeypatch):
-    monkeypatch.setattr("config_manager.ConfigManager.__init__", lambda self, config_file=None: None)
-    monkeypatch.setattr("config_manager.ConfigManager.get_language", lambda self: "fr")
+    monkeypatch.setattr("config.config_manager.ConfigManager.__init__", lambda self, config_file=None: None)
+    monkeypatch.setattr("config.config_manager.ConfigManager.get_language", lambda self: "fr")
     monkeypatch.setattr("localization_manager.LocalizationManager.__init__", lambda self, messages_file=None, language='en': None)
     monkeypatch.setattr("localization_manager.LocalizationManager.load_messages", lambda self: None)
     monkeypatch.setattr("localization_manager.LocalizationManager.get_message", lambda self, message_key, translator, language: message_key)
@@ -37,9 +37,9 @@ def test_start_console_interface(translator_wrapper_mock, language_config_mock, 
         if text == "bob":
             return 'bob (Bien dit!)'
         elif text == "test input":
-            return 'tupni tset'  # L'inversion de "test input"
+            return 'tupni tset'
         else:
-            return text[::-1]  # Inverse les autres entrées par défaut
+            return text[::-1]
 
     with patch('src.CLI.console_interface.Ohce', autospec=True) as mock_ohce_class, \
          patch('builtins.input', side_effect=["bob", "test input", 'exit']):
