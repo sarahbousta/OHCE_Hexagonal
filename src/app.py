@@ -1,5 +1,5 @@
 import sys
-from api_interface import app as api_app
+from API.api_interface import app as api_app
 from console_interface import ConsoleInterface
 from translator import TranslatorWrapper
 

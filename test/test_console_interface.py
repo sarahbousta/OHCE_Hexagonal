@@ -31,6 +31,7 @@ def test_start_console_interface(translator_wrapper_mock, language_config_mock, 
     monkeypatch.setattr("localization_manager.LocalizationManager.__init__", lambda self, messages_file=None, language='en': None)
     monkeypatch.setattr("localization_manager.LocalizationManager.load_messages", lambda self: None)
     monkeypatch.setattr("localization_manager.LocalizationManager.get_message", lambda self, message_key, translator, language: message_key)
+    monkeypatch.setattr("ohce.Clock.get_hour", lambda *args, **kwargs: 9)
 
     with patch('console_interface.Ohce', autospec=True) as mock_ohce_class, \
          patch('builtins.input', side_effect=["bob", "test input", 'exit']):
