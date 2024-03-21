@@ -28,9 +28,9 @@ def console_messages_mock(tmpdir):
 def test_start_console_interface(translator_wrapper_mock, language_config_mock, console_messages_mock, capsys, monkeypatch):
     monkeypatch.setattr("config.config_manager.ConfigManager.__init__", lambda self, config_file=None: None)
     monkeypatch.setattr("config.config_manager.ConfigManager.get_language", lambda self: "fr")
-    monkeypatch.setattr("localization_manager.LocalizationManager.__init__", lambda self, messages_file=None, language='en': None)
-    monkeypatch.setattr("localization_manager.LocalizationManager.load_messages", lambda self: None)
-    monkeypatch.setattr("localization_manager.LocalizationManager.get_message", lambda self, message_key, translator, language: message_key)
+    monkeypatch.setattr("localization.localization_manager.LocalizationManager.__init__", lambda self, messages_file=None, language='en': None)
+    monkeypatch.setattr("localization.localization_manager.LocalizationManager.load_messages", lambda self: None)
+    monkeypatch.setattr("localization.localization_manager.LocalizationManager.get_message", lambda self, message_key, translator, language: message_key)
     monkeypatch.setattr("core.ohce.Clock.get_hour", lambda *args, **kwargs: 9)
 
     def echo_side_effect(text):
