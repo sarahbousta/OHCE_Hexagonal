@@ -1,7 +1,7 @@
 import pytest
 import json
 from unittest.mock import patch, MagicMock
-from src.console_interface import ConsoleInterface
+from src.CLI.console_interface import ConsoleInterface
 
 @pytest.fixture
 def translator_wrapper_mock():
@@ -33,11 +33,20 @@ def test_start_console_interface(translator_wrapper_mock, language_config_mock, 
     monkeypatch.setattr("localization_manager.LocalizationManager.get_message", lambda self, message_key, translator, language: message_key)
     monkeypatch.setattr("ohce.Clock.get_hour", lambda *args, **kwargs: 9)
 
-    with patch('console_interface.Ohce', autospec=True) as mock_ohce_class, \
+    def echo_side_effect(text):
+        if text == "bob":
+            return 'bob (Bien dit!)'
+        elif text == "test input":
+            return 'tupni tset'  # L'inversion de "test input"
+        else:
+            return text[::-1]  # Inverse les autres entrées par défaut
+
+    with patch('src.CLI.console_interface.Ohce', autospec=True) as mock_ohce_class, \
          patch('builtins.input', side_effect=["bob", "test input", 'exit']):
         
         mock_ohce_class.return_value.greet.return_value = 'Bonjour'
-        mock_ohce_class.return_value.echo.return_value = 'bob (Bien dit!)'
+        # mock_ohce_class.return_value.echo.return_value = 'bob (Bien dit!)'
+        mock_ohce_class.return_value.echo.side_effect = echo_side_effect
         mock_ohce_class.return_value.farewell.return_value = 'Au revoir'
         
         console_interface = ConsoleInterface()

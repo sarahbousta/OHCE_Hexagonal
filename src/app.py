@@ -1,6 +1,6 @@
 import sys
 from API.api_interface import app as api_app
-from console_interface import ConsoleInterface
+from CLI.console_interface import ConsoleInterface
 from translator import TranslatorWrapper
 
 if __name__ == '__main__':
