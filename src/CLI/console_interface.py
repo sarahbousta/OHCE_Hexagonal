@@ -1,7 +1,7 @@
 from config.config_manager import ConfigManager
 from localization.localization_manager import LocalizationManager
 from CLI.console_manager import ConsoleManager
-from command_processor import CommandProcessor
+from CLI.command_processor import CommandProcessor
 from core.ohce import Ohce
 from translation.translator import TranslatorWrapper
 
