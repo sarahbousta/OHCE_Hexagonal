@@ -1,6 +1,6 @@
 import pytest
 from src.API.api_interface import app
-from ohce import Ohce
+from src.core.ohce import Ohce
 
 @pytest.fixture
 def client():
@@ -10,7 +10,7 @@ def client():
 
 def test_api_greet(client, monkeypatch):
     # Simuler le comportement de Ohce.greet()
-    monkeypatch.setattr('ohce.Ohce.greet', lambda self: "Bonjour")
+    monkeypatch.setattr('core.ohce.Ohce.greet', lambda self: "Bonjour")
     
     response = client.get('/greet?lang=fr')
     assert response.status_code == 200
@@ -19,7 +19,7 @@ def test_api_greet(client, monkeypatch):
 def test_api_echo(client, monkeypatch):
     # Simuler le comportement de Ohce.echo()
     test_text = "kayak"
-    monkeypatch.setattr('ohce.Ohce.echo', lambda self, text: f"{text} (Bien dit!)")
+    monkeypatch.setattr('core.ohce.Ohce.echo', lambda self, text: f"{text} (Bien dit!)")
     
     response = client.post('/echo', json={"text": test_text})
     assert response.status_code == 200
@@ -27,7 +27,7 @@ def test_api_echo(client, monkeypatch):
 
 def test_api_farewell(client, monkeypatch):
     # Simuler le comportement de Ohce.farewell()
-    monkeypatch.setattr('ohce.Ohce.farewell', lambda self: "Au revoir")
+    monkeypatch.setattr('core.ohce.Ohce.farewell', lambda self: "Au revoir")
     
     response = client.get('/farewell?lang=fr')
     assert response.status_code == 200

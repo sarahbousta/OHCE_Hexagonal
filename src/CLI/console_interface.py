@@ -2,7 +2,7 @@ from config.config_manager import ConfigManager
 from localization_manager import LocalizationManager
 from CLI.console_manager import ConsoleManager
 from command_processor import CommandProcessor
-from ohce import Ohce
+from core.ohce import Ohce
 from translator import TranslatorWrapper
 
 class ConsoleInterface:

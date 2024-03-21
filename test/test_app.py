@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import Mock
-from ohce import Ohce
-from src.clock import Clock, PartOfDay
+from src.core.ohce import Ohce
+from src.core.clock import Clock, PartOfDay
 
 def test_ohce_greet_morning():
     ohce = Ohce("fr")
