@@ -1,7 +1,3 @@
-# cette classe encapsule l'internationalisation.
-# Cela inclut la charge des messages depuis 
-# console_messages.json et leur traduction en 
-# fonction de la langue sélectionnée.
 import json
 import os
 
@@ -18,6 +14,3 @@ class LocalizationManager:
     def get_message(self, message_key, translator, language):
         message_id = self.messages.get(message_key, message_key)
         return translator.translate(text=message_id, target_language=language)
-
-
-    
