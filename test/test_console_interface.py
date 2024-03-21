@@ -1,7 +1,7 @@
 import pytest
 import json
 from unittest.mock import patch, MagicMock
-from console_interface import ConsoleInterface
+from src.console_interface import ConsoleInterface
 
 @pytest.fixture
 def translator_wrapper_mock():
@@ -33,7 +33,7 @@ def test_start_console_interface(translator_wrapper_mock, language_config_mock, 
     monkeypatch.setattr("localization_manager.LocalizationManager.get_message", lambda self, message_key, translator, language: message_key)
 
     with patch('console_interface.Ohce', autospec=True) as mock_ohce_class, \
-         patch('builtins.input', side_effect=["test input", 'exit']):
+         patch('builtins.input', side_effect=["bob", "test input", 'exit']):
         
         mock_ohce_class.return_value.greet.return_value = 'Bonjour'
         mock_ohce_class.return_value.echo.return_value = 'bob (Bien dit!)'
@@ -43,7 +43,7 @@ def test_start_console_interface(translator_wrapper_mock, language_config_mock, 
         console_interface.start()
 
         captured = capsys.readouterr()
-        assert "Bonjour\nbob (Bien dit!)\nfarewell_message\nAu revoir\n" in captured.out
+        assert "Bonjour\nbob (Bien dit!)\ntupni tset\nfarewell_message\nAu revoir\n" in captured.out
         assert "bob (Bien dit!)" in captured.out
         assert "Au revoir" in captured.out
 

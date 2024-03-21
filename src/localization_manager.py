@@ -1,12 +1,12 @@
 # cette classe encapsule l'internationalisation.
 # Cela inclut la charge des messages depuis 
 # console_messages.json et leur traduction en 
-# fonction de la langue sélectionnée. Une telle 
-# classe pourrait s'appeler LocalizationManager.
+# fonction de la langue sélectionnée.
 import json
+import os
 
 class LocalizationManager:
-    def __init__(self, messages_file='console_messages.json', language='en'):
+    def __init__(self, messages_file=os.path.join('config/console_messages.json'), language='en'):
         self.messages_file = messages_file
         self.language = language
         self.messages = self.load_messages()

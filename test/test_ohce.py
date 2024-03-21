@@ -2,7 +2,7 @@ import pytest
 import json
 from unittest.mock import Mock, patch
 from ohce import Ohce
-from clock import Clock, PartOfDay
+from src.clock import Clock, PartOfDay
 
 # Fixture pour mocker Clock et configurer les retours nécessaires pour les tests
 @pytest.fixture

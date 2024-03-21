@@ -26,11 +26,11 @@ class ConsoleInterface:
 
         try:
             while True:
-                # Obtenir l'entrée de l'utilisateur et traiter les commandes
+                # Obtient l'entrée de l'utilisateur et traite les commandes
                 user_input = self.console_manager.get_input('prompt_input', self.translator, self.language)
                 should_exit = self.command_processor.process_input(user_input, self.language)
                 if should_exit:
                     break
         except KeyboardInterrupt:
-            # Gérer l'interruption par Ctrl+C proprement
+            # Gère l'interruption par Ctrl+C proprement
             print(self.ohce.farewell())

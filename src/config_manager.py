@@ -1,12 +1,9 @@
-# Cette classe est responsable de lire, 
-# écrire et fournir des accès aux différentes 
-# configurations de l'application, comme la langue par défaut.
-
 import json
 import locale
+import os
 
 class ConfigManager:
-    def __init__(self, config_file='config.json'):
+    def __init__(self, config_file=os.path.join('../config/config.json')):
         self.config_file = config_file
         self.config = self.load_config()
 

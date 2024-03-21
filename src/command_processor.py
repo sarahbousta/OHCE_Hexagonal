@@ -10,7 +10,7 @@ class CommandProcessor:
         if user_input.lower() == 'exit':
             self.console_manager.print_message('farewell_message', self.translator, language)
             print(self.ohce.farewell())
-            return True  # Signal to exit
+            return True
         else:
             print(self.ohce.echo(user_input))
             return False

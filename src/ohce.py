@@ -1,6 +1,7 @@
 import json
 from translator import TranslatorWrapper
 from clock import Clock
+import os
 
 class Ohce:
     def __init__(self, language="fr"):
@@ -11,7 +12,7 @@ class Ohce:
 
     @staticmethod
     def load_greetings():
-        with open('greetings.json', 'r', encoding='utf-8') as f:
+        with open(os.path.join('config/greetings.json'), 'r', encoding='utf-8') as f:
             return json.load(f)
 
 
