@@ -3,7 +3,7 @@ from localization.localization_manager import LocalizationManager
 from CLI.console_manager import ConsoleManager
 from command_processor import CommandProcessor
 from core.ohce import Ohce
-from translator import TranslatorWrapper
+from translation.translator import TranslatorWrapper
 
 class ConsoleInterface:
     def __init__(self):

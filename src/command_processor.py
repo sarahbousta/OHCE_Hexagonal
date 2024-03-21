@@ -1,4 +1,4 @@
-from translator import TranslatorWrapper as translator
+from translation.translator import TranslatorWrapper as translator
 
 class CommandProcessor:
     def __init__(self, ohce, console_manager):

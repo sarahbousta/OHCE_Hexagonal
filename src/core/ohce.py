@@ -1,5 +1,5 @@
 import json
-from translator import TranslatorWrapper
+from translation.translator import TranslatorWrapper
 from core.clock import Clock
 import os
 
